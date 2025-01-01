@@ -18,13 +18,18 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
+    private String subCategoryName;
+    private String endCategoryName;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
-    public Category(String name) {
-        this.name = name;
-    }
+
+	public Category(String mainCategoryName, String subCategoryName, String categoryName) {
+		this.name = mainCategoryName;
+		this.subCategoryName = subCategoryName;
+		this.endCategoryName = categoryName;
+	}
+         
 }

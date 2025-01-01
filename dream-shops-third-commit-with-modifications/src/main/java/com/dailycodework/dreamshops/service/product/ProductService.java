@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final VehicleRepository vehicleRepository;
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
     private final CartItemRepository cartItemRepository;
@@ -32,31 +33,44 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest request) {
-        if (productExists(request.getName(), request.getBrand())) {
-            throw new AlreadyExistsException(request.getBrand() + " "
-                    + request.getName() + " already exists, you may update this product instead!");
-        }
-        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
+		
+        Category category = Optional.ofNullable(categoryRepository.findByNameAndSubCategoryNameAndEndCategoryName(request.getCategory().getName(),request.getCategory().getSubCategoryName(),request.getCategory().getEndCategoryName()))
                 .orElseGet(() -> {
-                    Category newCategory = new Category(request.getCategory().getName());
+                	Category newCategory = new Category(request.getCategory().getName(),request.getCategory().getSubCategoryName(),request.getCategory().getEndCategoryName());
                     return categoryRepository.save(newCategory);
                 });
+        Vehicle vehicle = Optional.ofNullable(vehicleRepository.findByNameAndVehicleBrandAndVehicleModel(request.getVehicle().getName(),request.getVehicle().getVehicleBrand(),request.getVehicle().getVehicleModel()))
+                .orElseGet(() -> {
+                	Vehicle newVehicle = new Vehicle(request.getVehicle().getName(),request.getVehicle().getVehicleBrand(),request.getVehicle().getVehicleModel());
+                    return vehicleRepository.save(newVehicle);
+                });
+		
+		if (productExists(request.getName(), vehicle)) {
+			throw new AlreadyExistsException(request.getName() + " " + request.getVehicle().getName()
+					+ " already exists, you may update this product instead!");
+		}
+
         request.setCategory(category);
+        request.setVehicle(vehicle);
         return productRepository.save(createProduct(request, category));
     }
 
-    private boolean productExists(String name, String brand) {
-        return productRepository.existsByNameAndBrand(name, brand);
+    private boolean productExists(String name, Vehicle brand) {
+    	List<Product> products=productRepository.findByVehicle(brand.getId());
+     return     products.stream().filter(product -> categoryRepository.existsBySubCategoryNameAndEndCategoryName(product.getCategory().getSubCategoryName(), product.getCategory().getEndCategoryName())).count()>0;
+        
+   //     return productRepository.existsByNameAndBrandAndSubCategoryAndCatgeory(name, brand,subCategory,category);
     }
 
     private Product createProduct(AddProductRequest request, Category category) {
         return new Product(
                 request.getName(),
-                request.getBrand(),
+                request.getVehicle(),
                 request.getPrice(),
                 request.getInventory(),
                 request.getDescription(),
-                category
+                category,
+                request.getBrand()
         );
     }
 
@@ -104,13 +118,16 @@ public class ProductService implements IProductService {
 
     private Product updateExistingProduct(Product existingProduct, ProductUpdateRequest request) {
         existingProduct.setName(request.getName());
-        existingProduct.setBrand(request.getBrand());
+       
         existingProduct.setPrice(request.getPrice());
         existingProduct.setInventory(request.getInventory());
         existingProduct.setDescription(request.getDescription());
 
-        Category category = categoryRepository.findByName(request.getCategory().getName());
+        Category category = new Category(request.getCategory().getName(),request.getCategory().getSubCategoryName(),request.getCategory().getEndCategoryName());
         existingProduct.setCategory(category);
+        
+        Vehicle vehicle= new Vehicle(request.getVehicle().getName(), request.getVehicle().getVehicleBrand(), request.getVehicle().getVehicleModel());
+        		 existingProduct.setVehicle(vehicle);
         return existingProduct;
 
     }
@@ -120,20 +137,18 @@ public class ProductService implements IProductService {
         return productRepository.findAll();
     }
 
-    @Override
-    public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByCategoryName(category);
-    }
-
-    @Override
-    public List<Product> getProductsByBrand(String brand) {
-        return productRepository.findByBrand(brand);
-    }
-
-    @Override
-    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-        return productRepository.findByCategoryNameAndBrand(category, brand);
-    }
+	/*
+	 * @Override public List<Product> getProductsByEndCategoryName(String
+	 * endCategoryName) { return
+	 * categoryRepository.findByEndCategoryName(endCategoryName); }
+	 * 
+	 * @Override public List<Product> getProductsByBrand(String brand) { return
+	 * productRepository.findByBrand(brand); }
+	 * 
+	 * @Override public List<Product> getProductsByCategoryAndBrand(String category,
+	 * String brand) { return productRepository.findByCategoryNameAndBrand(category,
+	 * brand); }
+	 */
 
     @Override
     public List<Product> getProductsByName(String name) {
@@ -142,12 +157,13 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getProductsByBrandAndName(String brand, String name) {
-        return productRepository.findByBrandAndName(brand, name);
+     //   return productRepository.findByBrandAndName(brand, name);
+    	return null;
     }
 
     @Override
     public Long countProductsByBrandAndName(String brand, String name) {
-        return productRepository.countByBrandAndName(brand, name);
+        return null;// productRepository.countByBrandAndName(brand, name);
     }
 
     @Override
@@ -177,12 +193,33 @@ public class ProductService implements IProductService {
         return new ArrayList<>(distinctProductsMap.values());
     }
 
-    @Override
-    public List<String> getAllDistinctBrands() {
-        return productRepository.findAll().stream()
-                .map(Product::getBrand)
-                .distinct()
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<Product> getProductsByCategory(String category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> getProductsByBrand(String brand) {
+		return productRepository.findByBrand(brand);
+	}
+
+	@Override
+	public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getAllDistinctBrands() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * @Override public List<String> getAllDistinctBrands() { return
+	 * productRepository.findAll().stream() .map(Product::getBrand) .distinct()
+	 * .collect(Collectors.toList()); }
+	 */
 
 }

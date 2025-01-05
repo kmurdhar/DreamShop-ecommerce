@@ -68,13 +68,13 @@ public class OrderController {
         }
     }
     
-    @GetMapping
-    public List<Order> getAllOrders() {
+    @GetMapping("/user/getAllOrders")
+    public List<OrderDto> getAllOrders() {
         return orderService.getAllOrders();
     }
-    
+  
     @GetMapping("/user/{userId}")
-    public List<Order> getOrdersByUserId(@PathVariable Long userId) {
+    public List<OrderDto> getOrdersByUserId(@PathVariable Long userId) {
         return orderService.getOrdersByUserId(userId);
     }
     
@@ -90,5 +90,5 @@ public class OrderController {
         orderService.cancelOrder(id);
         return ResponseEntity.noContent().build();
     }
-    
+     
 }

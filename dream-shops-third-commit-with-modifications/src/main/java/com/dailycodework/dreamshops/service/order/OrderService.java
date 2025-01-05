@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -88,5 +89,36 @@ public class OrderService implements IOrderService {
     public OrderDto convertToDto(Order order) {
         return modelMapper.map(order, OrderDto.class);
     }
+    
+    @Override
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+	@Override
+	public List<Order> getOrdersByUserId(Long userId) {
+		  return orderRepository.findByUserId(userId);
+	}
+
+	@Override
+	public Optional<Order> getOrderById(Long id) {
+		  return orderRepository.findById(id);
+	}
+
+	@Override
+	public Order updateOrderStatus(Long id, OrderStatus status) {
+		 Order order = orderRepository.findById(id)
+		            .orElseThrow(() -> new RuntimeException("Order not found"));
+		        order.setOrderStatus(status);
+		        return orderRepository.save(order);
+	}
+
+	@Override
+	public void cancelOrder(Long id) {
+		 Order order = orderRepository.findById(id)
+		            .orElseThrow(() -> new RuntimeException("Order not found"));
+		        order.setOrderStatus(OrderStatus.CANCELLED);
+		        orderRepository.save(order);
+	}
     
 }

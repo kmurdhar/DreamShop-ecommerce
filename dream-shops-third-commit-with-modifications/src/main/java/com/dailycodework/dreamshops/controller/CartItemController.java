@@ -42,22 +42,22 @@ public class CartItemController {
         }
     }
 
-    @DeleteMapping("/cart/{cartId}/item/{itemId}/remove")
-    public ResponseEntity<ApiResponse> removeItemFromCart(@PathVariable Long cartId, @PathVariable Long itemId) {
+    @DeleteMapping("/cart/{cartId}/item/{productId}/remove")
+    public ResponseEntity<ApiResponse> removeItemFromCart(@PathVariable Long cartId, @PathVariable Long productId) {
         try {
-            cartItemService.removeItemFromCart(cartId, itemId);
+            cartItemService.removeItemFromCart(cartId, productId);
             return ResponseEntity.ok(new ApiResponse("Remove Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
-    @PutMapping("/cart/{cartId}/item/{itemId}/update")
+    @PutMapping("/cart/{cartId}/item/{productId}/update")
     public  ResponseEntity<ApiResponse> updateItemQuantity(@PathVariable Long cartId,
-                                                           @PathVariable Long itemId,
+                                                           @PathVariable Long productId,
                                                            @RequestParam Integer quantity) {
         try {
-            cartItemService.updateItemQuantity(cartId, itemId, quantity);
+            cartItemService.updateItemQuantity(cartId, productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Update Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

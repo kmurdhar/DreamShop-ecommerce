@@ -68,7 +68,7 @@ public class VehicleController {
         try {
         	List<Vehicle> theVehicle = vehicleService.getVehicleBrandByName(vehicleBrand);
             return  ResponseEntity.ok(new ApiResponse("Found", theVehicle));
-        } catch (ResourceNotFoundException e) {
+        } catch (ResourceNotFoundException  e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }

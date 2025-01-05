@@ -19,6 +19,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     
     @Query(nativeQuery = true, value = "SELECT * FROM product  where vehicle_id=:vehicleid")
     List<Product>  findByVehicle(@Param("vehicleid")  Long vehicleid);
+    
+    
+    @Query(nativeQuery = true, value = "SELECT * FROM product  where vehicle_id=:vehicleid and category_id=:categoryId")
+    List<Product>  checkProductExist(@Param("categoryId")  Long categoryId,@Param("vehicleid")  Long vehicleid);
   
   
     List<Product> findByBrand(String brand);
@@ -26,6 +30,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<Product> findByName(@Param("name") String name);
 
+    @Query(nativeQuery = true, value = "select * from product where category_id in (:categoryId) ")
+    List<Product>  findAllByCategoryId(@Param("categoryId")  List<Long>  categoryId);
+    
+    @Query(nativeQuery = true, value = "select * from product where vehicle_id in (:vehicleId) ")
+    List<Product>  findAllByVehicleId(@Param("vehicleId")  List<Long>  vehicleId);
+    
     List<Product> findByBrandAndName(String brand, String name);
 
     Long countByBrandAndName(String brand, String name);

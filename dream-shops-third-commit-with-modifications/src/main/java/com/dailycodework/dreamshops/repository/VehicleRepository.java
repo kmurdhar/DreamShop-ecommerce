@@ -1,15 +1,17 @@
 package com.dailycodework.dreamshops.repository;
 
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.dailycodework.dreamshops.model.Vehicle; 
 
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 	  
-	Vehicle findByName(String name);
-	Vehicle findByVehicleBrand(String vehicleBrand);
-	Vehicle findByVehicleModel(String vehicleModel);
+	List<Vehicle> findByName(String name);
+	List<Vehicle> findByVehicleBrand(String vehicleBrand);
+	List<Vehicle> findByVehicleModel(String vehicleModel);
 	Vehicle findByNameAndVehicleBrandAndVehicleModel(String name,String vehicleBrand,String vehicleModel);
   boolean existsByVehicleBrand(String vehicleBrand);
   boolean existsByName(String name);

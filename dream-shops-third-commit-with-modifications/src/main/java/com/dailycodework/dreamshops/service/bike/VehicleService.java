@@ -57,17 +57,17 @@ public class VehicleService implements IVehicleService {
     }
 
 	@Override
-	public Vehicle getVehicleByName(String name) {
+	public List<Vehicle> getVehicleByName(String name) {
 	    return vehicleRepository.findByName(name);
 	}
 
 	@Override
-	public Vehicle getVehicleBrandByName(String name) {
+	public List<Vehicle> getVehicleBrandByName(String name) {
 	    return vehicleRepository.findByVehicleBrand(name);
 	}
 	
 	@Override
-	public Vehicle getVehicleModelByName(String name) {
+	public List<Vehicle> getVehicleModelByName(String name) {
 	    return vehicleRepository.findByVehicleModel(name);
 	}
 

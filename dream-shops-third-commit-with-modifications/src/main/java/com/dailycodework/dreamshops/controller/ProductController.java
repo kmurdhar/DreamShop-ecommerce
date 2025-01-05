@@ -54,7 +54,7 @@ public class ProductController {
             return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/product/{productId}/update")
     public  ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest request, @PathVariable Long productId) {
         try {
@@ -66,7 +66,7 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/product/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         try {
@@ -133,10 +133,10 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/{category}/all/products")
-    public ResponseEntity<ApiResponse> findProductsByCategory(@PathVariable String category) {
+    @GetMapping("/product/{category}/sub/products")
+    public ResponseEntity<ApiResponse> findProductsBySubCategory(@PathVariable String category) {
         try {
-            List<Product> products = productService.getProductsByCategory(category);
+            List<Product> products = productService.getProductsBySubCategory(category);
             if (products.isEmpty()) {
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products found ", null));
             }
@@ -146,7 +146,23 @@ public class ProductController {
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
-
+    
+    @GetMapping("/product/{category}/main/products")
+    public ResponseEntity<ApiResponse> findProductsByMainCategory(@PathVariable String category) {
+        try {
+            List<Product> products = productService.getProductsByMainCategory(category);
+            if (products.isEmpty()) {
+                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products found ", null));
+            }
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
+        }
+    }
+    
+    
+  
     // New end point 1
     @GetMapping("/distinct/products")
     public ResponseEntity<ApiResponse> getDistinctProductsByCategory() {
@@ -179,6 +195,48 @@ public class ProductController {
         try {
             var productCount = productService.countProductsByBrandAndName(brand, name);
             return ResponseEntity.ok(new ApiResponse("Product count!", productCount));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
+        }
+    }
+    
+    @GetMapping("/product/{vehicle}/vehicle/model")
+    public ResponseEntity<ApiResponse> findProductsByVehicleModel(@PathVariable String vehicle) {
+        try {
+            List<Product> products = productService.findProductsByVehicleModel(vehicle);
+            if (products.isEmpty()) {
+                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products found ", null));
+            }
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
+        }
+    }
+    
+    @GetMapping("/product/{vehicle}/vehicle/brand")
+    public ResponseEntity<ApiResponse> findProductsByVehicleBrand(@PathVariable String vehicle) {
+        try {
+            List<Product> products = productService.findProductsByVehicleBrand(vehicle);
+            if (products.isEmpty()) {
+                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products found ", null));
+            }
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
+        }
+    }
+    
+    @GetMapping("/product/{vehicle}/allvehicle")
+    public ResponseEntity<ApiResponse> findProductsByAllVehicle(@PathVariable String vehicle) {
+        try {
+            List<Product> products = productService.findProductsAllVehicle(vehicle);
+            if (products.isEmpty()) {
+                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products found ", null));
+            }
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }

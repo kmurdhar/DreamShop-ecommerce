@@ -13,7 +13,8 @@ public interface IProductService {
     void deleteProductById(Long id);
     Product updateProduct(ProductUpdateRequest product, Long productId);
     List<Product> getAllProducts();
-    List<Product> getProductsByCategory(String category);
+    List<Product> getProductsByMainCategory(String category);
+    List<Product> getProductsBySubCategory(String category);
     List<Product> getProductsByBrand(String brand);
     List<Product> getProductsByCategoryAndBrand(String category, String brand);
     List<Product> getProductsByName(String name);
@@ -29,4 +30,9 @@ public interface IProductService {
     List<Product> findDistinctProductsByName();
 
     List<String> getAllDistinctBrands();
+    
+    List<Product> findProductsByVehicleModel(String vehicle);
+    List<Product> findProductsByVehicleBrand(String vehicle);
+    List<Product> findProductsAllVehicle(String vehicle);
+    
 }

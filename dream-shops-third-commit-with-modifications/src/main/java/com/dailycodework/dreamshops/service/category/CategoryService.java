@@ -57,12 +57,12 @@ public class CategoryService implements ICategoryService {
     }
 
 	@Override
-	public Category getCategoryByName(String name) {
+	public List<Category> getCategoryByName(String name) {
 	    return categoryRepository.findByName(name);
 	}
 
 	@Override
-	public Category getSubCategoryByName(String name) {
+	public List<Category> getSubCategoryByName(String name) {
 	    return categoryRepository.findBySubCategoryName(name);
 	}
 	

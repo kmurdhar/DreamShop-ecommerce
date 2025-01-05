@@ -8,9 +8,9 @@ import java.util.List;
 public interface IVehicleService {
 	
     Vehicle getVehicleById(Long id);
-    Vehicle getVehicleByName(String name);
-    Vehicle getVehicleBrandByName(String vehicleBrand);
-    Vehicle getVehicleModelByName(String vehicleModel);
+    List<Vehicle> getVehicleByName(String name);
+    List<Vehicle> getVehicleBrandByName(String vehicleBrand);
+    List<Vehicle> getVehicleModelByName(String vehicleModel);
     List<Vehicle> getAllVehicles();
     Vehicle addVehicle(Vehicle bike);
     Vehicle updateVehicle(Vehicle bike, Long id);

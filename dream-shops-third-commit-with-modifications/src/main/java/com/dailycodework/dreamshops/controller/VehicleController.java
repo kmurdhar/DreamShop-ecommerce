@@ -56,7 +56,7 @@ public class VehicleController {
     @GetMapping("/vehicle/{name}/name")
     public ResponseEntity<ApiResponse> getVehicleByName(@PathVariable String name){
         try {
-        	Vehicle theVehicle = vehicleService.getVehicleByName(name);
+        	List<Vehicle> theVehicle = vehicleService.getVehicleByName(name);
             return  ResponseEntity.ok(new ApiResponse("Found", theVehicle));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -66,7 +66,7 @@ public class VehicleController {
     @GetMapping("/vehicle/{vehicleBrand}/vehicleBrand")
     public ResponseEntity<ApiResponse> getVehicleBrandByName(@PathVariable String vehicleBrand){
         try {
-        	Vehicle theVehicle = vehicleService.getVehicleBrandByName(vehicleBrand);
+        	List<Vehicle> theVehicle = vehicleService.getVehicleBrandByName(vehicleBrand);
             return  ResponseEntity.ok(new ApiResponse("Found", theVehicle));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -76,7 +76,7 @@ public class VehicleController {
     @GetMapping("/vehicle/{vehicleModel}/vehicleModel")
     public ResponseEntity<ApiResponse> getVehicleModelByName(@PathVariable String vehicleModel){
         try {
-        	Vehicle theVehicle = vehicleService.getVehicleModelByName(vehicleModel);
+        	List<Vehicle> theVehicle = vehicleService.getVehicleModelByName(vehicleModel);
             return  ResponseEntity.ok(new ApiResponse("Found", theVehicle));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

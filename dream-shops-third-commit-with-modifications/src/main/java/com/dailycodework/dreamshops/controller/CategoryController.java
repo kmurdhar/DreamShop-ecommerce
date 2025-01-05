@@ -53,7 +53,7 @@ public class CategoryController {
     @GetMapping("/category/{maincategory}/maincategory")
     public ResponseEntity<ApiResponse> getMainCategoryByName(@PathVariable String maincategory){
         try {
-        	Category theCategory = categoryService.getCategoryByName(maincategory);
+        	List<Category> theCategory = categoryService.getCategoryByName(maincategory);
             return  ResponseEntity.ok(new ApiResponse("Found", theCategory));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -63,7 +63,7 @@ public class CategoryController {
     @GetMapping("/category/{subcategory}/subcategory")
     public ResponseEntity<ApiResponse> getSubCategoryByName(@PathVariable String subcategory){
         try {
-        	Category theCategory = categoryService.getSubCategoryByName(subcategory);
+        	List<Category> theCategory = categoryService.getSubCategoryByName(subcategory);
             return  ResponseEntity.ok(new ApiResponse("Found", theCategory));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -73,7 +73,7 @@ public class CategoryController {
     @GetMapping("/category/{name}/category")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name){
         try {
-        	Category theCategory = categoryService.getCategoryByName(name);
+        	List<Category> theCategory = categoryService.getCategoryByName(name);
             return  ResponseEntity.ok(new ApiResponse("Found", theCategory));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

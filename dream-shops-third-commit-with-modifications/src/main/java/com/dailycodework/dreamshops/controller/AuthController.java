@@ -2,9 +2,12 @@ package com.dailycodework.dreamshops.controller;
 
 
 import com.dailycodework.dreamshops.data.RoleRepository;
+import com.dailycodework.dreamshops.dto.ImageDto;
 import com.dailycodework.dreamshops.dto.UserDto;
+import com.dailycodework.dreamshops.model.Image;
 import com.dailycodework.dreamshops.model.Role;
 import com.dailycodework.dreamshops.model.User;
+import com.dailycodework.dreamshops.model.UserImage;
 import com.dailycodework.dreamshops.repository.UserRepository;
 import com.dailycodework.dreamshops.request.LoginRequest;
 import com.dailycodework.dreamshops.response.ApiResponse;
@@ -14,9 +17,13 @@ import com.dailycodework.dreamshops.security.user.ShopUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +78,7 @@ public class AuthController {
         user.setEmail(userDto.getEmail());
         user.setPassword(encodedPass);
         user.setRoles(Set.of(userRole));
+        user.setShopName(userDto.getShopName());
         userRepository.save(user);
        
         Authentication authentication = authenticationManager

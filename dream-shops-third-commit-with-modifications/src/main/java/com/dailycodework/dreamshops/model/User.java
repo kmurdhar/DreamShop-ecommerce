@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -25,6 +26,9 @@ public class User {
     @NaturalId
     private String email;
     private String password;
+    private String shopName; 
+    
+    
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;

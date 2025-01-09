@@ -21,6 +21,7 @@ public class CartItem {
     private int quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
+    private String selectedColor;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

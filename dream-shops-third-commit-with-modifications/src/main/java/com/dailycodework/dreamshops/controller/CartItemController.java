@@ -29,11 +29,11 @@ public class CartItemController {
     @PostMapping("/item/add")
     public ResponseEntity<ApiResponse> addItemToCart(
                                                      @RequestParam Long productId,
-                                                     @RequestParam Integer quantity) {
+                                                     @RequestParam Integer quantity,@RequestParam String selectedColor) {
         try {
               User user = userService.getAuthenticatedUser();
               Cart cart= cartService.initializeNewCart(user);
-            cartItemService.addItemToCart(cart.getId(), productId, quantity);
+            cartItemService.addItemToCart(cart.getId(), productId, quantity,selectedColor);
             return ResponseEntity.ok(new ApiResponse("Item added to cart successfully", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -42,10 +42,10 @@ public class CartItemController {
         }
     }
 
-    @DeleteMapping("/cart/{cartId}/item/{productId}/remove")
-    public ResponseEntity<ApiResponse> removeItemFromCart(@PathVariable Long cartId, @PathVariable Long productId) {
+    @DeleteMapping("/cart/{cartId}/item/{productId}/{selectedColor}/remove")
+    public ResponseEntity<ApiResponse> removeItemFromCart(@PathVariable Long cartId, @PathVariable Long productId,@RequestParam String selectedColor) {
         try {
-            cartItemService.removeItemFromCart(cartId, productId);
+            cartItemService.removeItemFromCart(cartId, productId,selectedColor);
             return ResponseEntity.ok(new ApiResponse("Remove Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -55,9 +55,9 @@ public class CartItemController {
     @PutMapping("/cart/{cartId}/item/{productId}/update")
     public  ResponseEntity<ApiResponse> updateItemQuantity(@PathVariable Long cartId,
                                                            @PathVariable Long productId,
-                                                           @RequestParam Integer quantity) {
+                                                           @RequestParam Integer quantity, @RequestParam String selectedColor) {
         try {
-            cartItemService.updateItemQuantity(cartId, productId, quantity);
+            cartItemService.updateItemQuantity(cartId, productId, quantity,selectedColor);
             return ResponseEntity.ok(new ApiResponse("Update Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

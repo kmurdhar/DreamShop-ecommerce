@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Blob;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,7 +24,7 @@ public class Image {
     @Lob
     private Blob image;
     private String downloadUrl;
-
+    private String  color;
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;

@@ -7,6 +7,9 @@ import com.dailycodework.dreamshops.model.Product;
 import com.dailycodework.dreamshops.response.ApiResponse;
 import com.dailycodework.dreamshops.service.image.IImageService;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +31,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequestMapping("${api.prefix}/images")
 public class ImageController {
     private final IImageService imageService;
+    private static final Logger logger = LogManager.getLogger(ImageController.class);
 
 
     @PostMapping("/upload")
@@ -38,7 +42,8 @@ public class ImageController {
             List<ImageDto> imageDtos = imageService.saveImages(productId, files,color);
             return ResponseEntity.ok(new ApiResponse("Images Uploaded successfully!", imageDtos));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Upload failed!", e.getMessage()));
+        	logger.error("ImageController failed "+e.getMessage());
+        	return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Upload failed!", e.getMessage()));
         }
 
     }
@@ -61,7 +66,8 @@ public class ImageController {
                 return ResponseEntity.ok(new ApiResponse("Update success!", null));
             }
         } catch (ResourceNotFoundException e) {
-            return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("ImageController failed "+e.getMessage());
+        	return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update failed!", INTERNAL_SERVER_ERROR));
     }
@@ -76,7 +82,8 @@ public class ImageController {
                 return ResponseEntity.ok(new ApiResponse("Delete success!", null));
             }
         } catch (ResourceNotFoundException e) {
-            return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("ImageController failed "+e.getMessage());
+        	return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete failed!", INTERNAL_SERVER_ERROR));
     }

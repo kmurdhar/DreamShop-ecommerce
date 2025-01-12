@@ -11,6 +11,9 @@ import com.dailycodework.dreamshops.service.image.IUserImageService;
 import com.dailycodework.dreamshops.service.user.IUserService;
 
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +35,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequestMapping("${api.prefix}/userimages")
 public class UserImageController {
     private final IUserImageService userService;
+    private static final Logger logger = LogManager.getLogger(UserImageController.class);
 
 
     @PostMapping("/upload")
@@ -42,7 +46,8 @@ public class UserImageController {
             List<ImageDto> imageDtos = userService.saveImages(userId, files);
             return ResponseEntity.ok(new ApiResponse("Images Uploaded successfully!", imageDtos));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Upload failed!", e.getMessage()));
+        	logger.error("UserImageController  failed "+e.getMessage());
+        	return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Upload failed!", e.getMessage()));
         }
 
     }
@@ -65,7 +70,8 @@ public class UserImageController {
                 return ResponseEntity.ok(new ApiResponse("Update success!", null));
             }
         } catch (ResourceNotFoundException e) {
-            return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("UserImageController  failed "+e.getMessage());
+        	return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update failed!", INTERNAL_SERVER_ERROR));
     }
@@ -80,6 +86,7 @@ public class UserImageController {
                 return ResponseEntity.ok(new ApiResponse("Delete success!", null));
             }
         } catch (ResourceNotFoundException e) {
+        	logger.error("UserImageController  failed "+e.getMessage());        	
             return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete failed!", INTERNAL_SERVER_ERROR));

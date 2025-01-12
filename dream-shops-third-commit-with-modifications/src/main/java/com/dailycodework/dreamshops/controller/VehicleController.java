@@ -9,6 +9,9 @@ import com.dailycodework.dreamshops.response.ApiResponse;
 import com.dailycodework.dreamshops.service.bike.IVehicleService;
 import com.dailycodework.dreamshops.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +25,7 @@ import static org.springframework.http.HttpStatus.*;
 public class VehicleController {
 	
     private final IVehicleService vehicleService; 
+    private static final Logger logger = LogManager.getLogger(VehicleController.class);
 
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllVehicles() {
@@ -29,6 +33,7 @@ public class VehicleController {
             List<Vehicle> vehicles = vehicleService.getAllVehicles();
             return  ResponseEntity.ok(new ApiResponse("Found!", vehicles));
         } catch (Exception e) {
+        	logger.error("VehicleController  failed "+e.getMessage());        	
            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Error:", INTERNAL_SERVER_ERROR));
         }
     }
@@ -39,7 +44,8 @@ public class VehicleController {
         	Vehicle theVehicle = vehicleService.addVehicle(name);
             return  ResponseEntity.ok(new ApiResponse("Success", theVehicle));
         } catch (AlreadyExistsException e) {
-           return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("VehicleController  failed "+e.getMessage());       
+        	return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -49,7 +55,8 @@ public class VehicleController {
         	Vehicle theVehicle = vehicleService.getVehicleById(id);
             return  ResponseEntity.ok(new ApiResponse("Found", theVehicle));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("VehicleController  failed "+e.getMessage());       
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -59,7 +66,8 @@ public class VehicleController {
         	List<Vehicle> theVehicle = vehicleService.getVehicleByName(name);
             return  ResponseEntity.ok(new ApiResponse("Found", theVehicle));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("VehicleController  failed "+e.getMessage());       
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
     
@@ -69,7 +77,8 @@ public class VehicleController {
         	List<Vehicle> theVehicle = vehicleService.getVehicleBrandByName(vehicleBrand);
             return  ResponseEntity.ok(new ApiResponse("Found", theVehicle));
         } catch (ResourceNotFoundException  e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("VehicleController  failed "+e.getMessage());       
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
     
@@ -79,7 +88,8 @@ public class VehicleController {
         	List<Vehicle> theVehicle = vehicleService.getVehicleModelByName(vehicleModel);
             return  ResponseEntity.ok(new ApiResponse("Found", theVehicle));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("VehicleController  failed "+e.getMessage());       
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -90,7 +100,8 @@ public class VehicleController {
         	vehicleService.deleteVehicleById(id);
             return  ResponseEntity.ok(new ApiResponse("Found", null));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("VehicleController  failed "+e.getMessage());       
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -100,7 +111,8 @@ public class VehicleController {
         	Vehicle updatedVehicle = vehicleService.updateVehicle(vehicle, id);
             return ResponseEntity.ok(new ApiResponse("Update success!", updatedVehicle));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("VehicleController  failed "+e.getMessage());       
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

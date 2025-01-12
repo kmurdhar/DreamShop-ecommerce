@@ -1,6 +1,6 @@
 package com.dailycodework.dreamshops.service.cart;
 
-import com.dailycodework.dreamshops.exceptions.ResourceNotFoundException;
+ import com.dailycodework.dreamshops.exceptions.ResourceNotFoundException;
 import com.dailycodework.dreamshops.model.Cart;
 import com.dailycodework.dreamshops.model.CartItem;
 import com.dailycodework.dreamshops.model.Product;
@@ -8,6 +8,9 @@ import com.dailycodework.dreamshops.repository.CartItemRepository;
 import com.dailycodework.dreamshops.repository.CartRepository;
 import com.dailycodework.dreamshops.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,7 +22,8 @@ public class CartItemService  implements ICartItemService{
     private final CartRepository cartRepository;
     private final IProductService productService;
     private final ICartService cartService;
-    
+    private static final Logger logger = LogManager.getLogger(CartItemService.class);
+
     @Override
     public void addItemToCart(Long cartId, Long productId, int quantity,String selectedColor) {
         Cart cart = cartService.getCart(cartId);

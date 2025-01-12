@@ -10,6 +10,9 @@ import com.dailycodework.dreamshops.service.image.IImageService;
 import com.dailycodework.dreamshops.service.image.IShopImageService;
 
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +34,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequestMapping("${api.prefix}/shopimages")
 public class ShopImageController {
     private final IShopImageService imageService;
+    private static final Logger logger = LogManager.getLogger(ShopImageController.class);
 
 
     @PostMapping("/upload")
@@ -41,6 +45,7 @@ public class ShopImageController {
             List<ImageDto> imageDtos = imageService.saveImages(userId, files);
             return ResponseEntity.ok(new ApiResponse("Images Uploaded successfully!", imageDtos));
         } catch (Exception e) {
+        	logger.error("ShopImageController failed "+e.getMessage());
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Upload failed!", e.getMessage()));
         }
 
@@ -64,6 +69,7 @@ public class ShopImageController {
                 return ResponseEntity.ok(new ApiResponse("Update success!", null));
             }
         } catch (ResourceNotFoundException e) {
+        	logger.error("ShopImageController failed "+e.getMessage());
             return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update failed!", INTERNAL_SERVER_ERROR));
@@ -79,6 +85,7 @@ public class ShopImageController {
                 return ResponseEntity.ok(new ApiResponse("Delete success!", null));
             }
         } catch (ResourceNotFoundException e) {
+        	logger.error("ShopImageController failed "+e.getMessage());
             return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete failed!", INTERNAL_SERVER_ERROR));

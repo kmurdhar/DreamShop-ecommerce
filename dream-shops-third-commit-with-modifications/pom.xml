@@ -102,6 +102,20 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		
+    <!-- Exclude Spring Boot's default logging framework (Logback) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-logging</artifactId>
+        <scope>provided</scope> <!-- Exclude Logback -->
+    </dependency>
+
+    <!-- Add Log4j2 dependencies -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-log4j2</artifactId>
+    </dependency>
 	</dependencies>
 
 	<build>

@@ -10,6 +10,9 @@ import com.dailycodework.dreamshops.request.ProductUpdateRequest;
 import com.dailycodework.dreamshops.response.ApiResponse;
 import com.dailycodework.dreamshops.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("${api.prefix}/products")
 public class ProductController {
     private final IProductService productService;
+    private static final Logger logger = LogManager.getLogger(ProductController.class);
 
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllProducts() {
@@ -39,7 +43,8 @@ public class ProductController {
             ProductDto productDto = productService.convertToDto(product);
             return  ResponseEntity.ok(new ApiResponse("success", productDto));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("ProductController failed "+e.getMessage());
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -51,6 +56,7 @@ public class ProductController {
             ProductDto productDto = productService.convertToDto(theProduct);
             return ResponseEntity.ok(new ApiResponse("Add product success!", productDto));
         } catch (AlreadyExistsException e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -62,6 +68,7 @@ public class ProductController {
             ProductDto productDto = productService.convertToDto(theProduct);
             return ResponseEntity.ok(new ApiResponse("Update product success!", productDto));
         } catch (ResourceNotFoundException e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -73,6 +80,7 @@ public class ProductController {
             productService.deleteProductById(productId);
             return ResponseEntity.ok(new ApiResponse("Delete product success!", productId));
         } catch (ResourceNotFoundException e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -87,6 +95,7 @@ public class ProductController {
             List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
             return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -101,6 +110,7 @@ public class ProductController {
             List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
             return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("error", e.getMessage()));
         }
     }
@@ -115,6 +125,7 @@ public class ProductController {
             List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
             return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("error", e.getMessage()));
         }
     }
@@ -129,6 +140,7 @@ public class ProductController {
             List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
             return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -143,6 +155,7 @@ public class ProductController {
             List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
             return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -157,6 +170,7 @@ public class ProductController {
             List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
             return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -174,6 +188,7 @@ public class ProductController {
             List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
             return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -185,6 +200,7 @@ public class ProductController {
             List<String> brands = productService.getAllDistinctBrands();
             return  ResponseEntity.ok(new ApiResponse("success", brands));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -196,6 +212,7 @@ public class ProductController {
             var productCount = productService.countProductsByBrandAndName(brand, name);
             return ResponseEntity.ok(new ApiResponse("Product count!", productCount));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -210,6 +227,7 @@ public class ProductController {
             List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
             return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -224,6 +242,7 @@ public class ProductController {
             List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
             return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -238,6 +257,7 @@ public class ProductController {
             List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
             return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
         } catch (Exception e) {
+        	logger.error("ProductController failed "+e.getMessage());
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }

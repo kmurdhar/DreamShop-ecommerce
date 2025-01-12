@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    
+    <!-- Console Appender: Logs output to console -->
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n </Pattern>
+            </PatternLayout>
+        </Console>
+        
+        <!-- File Appender: Logs output to a file -->
+        <File name="File" fileName="logs/application.log">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n </Pattern>
+             </PatternLayout>
+        </File>
+    </Appenders>
+
+    <!-- Loggers -->
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File" />
+        </Root>
+
+        <Logger name="org.springframework.web" level="debug" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+        
+    </Loggers>
+</Configuration>

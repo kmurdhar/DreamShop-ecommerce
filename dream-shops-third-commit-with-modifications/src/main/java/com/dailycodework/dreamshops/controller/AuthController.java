@@ -25,6 +25,8 @@ import java.util.Set;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,9 +51,11 @@ public class AuthController {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     
+    private static final Logger logger = LogManager.getLogger(AuthController.class);
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request) {
         try {
+        	logger.info("AuthController ....  login method");
             Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(
                             request.getEmail(), request.getPassword()));
@@ -59,8 +63,10 @@ public class AuthController {
             String jwt = jwtUtils.generateTokenForUser(authentication);
             ShopUserDetails userDetails = (ShopUserDetails) authentication.getPrincipal();
             JwtResponse jwtResponse = new JwtResponse(userDetails.getId(), jwt);
+            logger.info("jwtResponse ...."+jwtResponse);
             return ResponseEntity.ok(new ApiResponse("Login Success!", jwtResponse));
         } catch (AuthenticationException e) {
+        	logger.error("AuthController failed "+e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
         }
 

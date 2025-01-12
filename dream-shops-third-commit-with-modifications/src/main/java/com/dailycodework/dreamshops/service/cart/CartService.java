@@ -10,6 +10,9 @@ import com.dailycodework.dreamshops.repository.UserRepository;
 import com.dailycodework.dreamshops.service.product.IProductService;
 import com.dailycodework.dreamshops.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,7 @@ public class CartService implements ICartService{
     private final CartItemRepository cartItemRepository;
     private final ModelMapper modelMapper;
     private final IUserService userService;
+    private static final Logger logger = LogManager.getLogger(CartService.class);
 
     @Override
     public Cart getCart(Long cartId) {

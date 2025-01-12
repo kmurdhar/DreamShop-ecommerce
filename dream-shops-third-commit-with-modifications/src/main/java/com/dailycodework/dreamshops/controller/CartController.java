@@ -7,6 +7,9 @@ import com.dailycodework.dreamshops.response.ApiResponse;
 import com.dailycodework.dreamshops.service.cart.CartService;
 import com.dailycodework.dreamshops.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequestMapping("${api.prefix}/carts")
 public class CartController {
     private final ICartService cartService;
+    private static final Logger logger = LogManager.getLogger(CartController.class);
 
  /*   @GetMapping("/{cartId}/my-cart")
     public ResponseEntity<ApiResponse> getCart( @PathVariable Long cartId) {
@@ -38,6 +42,7 @@ public class CartController {
             CartDto cartDto = cartService.convertToDto(cart);
             return ResponseEntity.ok(new ApiResponse("Success", cartDto));
         } catch (ResourceNotFoundException e) {
+        	logger.error("CartController failed "+e.getMessage());
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -48,7 +53,8 @@ public class CartController {
             cartService.clearCart(cartId);
             return ResponseEntity.ok(new ApiResponse("Clear Cart Success!", null));
         } catch (ResourceNotFoundException e) {
-          return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("CartController failed "+e.getMessage());
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -58,7 +64,8 @@ public class CartController {
             BigDecimal totalPrice = cartService.getTotalPrice(cartId);
             return ResponseEntity.ok(new ApiResponse("Total Price", totalPrice));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("CartController failed "+e.getMessage());
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 }

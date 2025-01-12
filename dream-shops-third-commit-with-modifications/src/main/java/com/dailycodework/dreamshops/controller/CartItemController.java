@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/cartItems")
@@ -25,6 +28,7 @@ public class CartItemController {
     private final ICartService cartService;
     private final IUserService userService;
 
+    private static final Logger logger = LogManager.getLogger(CartItemController.class);
 
     @PostMapping("/item/add")
     public ResponseEntity<ApiResponse> addItemToCart(
@@ -38,6 +42,7 @@ public class CartItemController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }catch (JwtException e){
+        	logger.error("CartItemController failed "+e.getMessage());
             return  ResponseEntity.status(UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -48,7 +53,8 @@ public class CartItemController {
             cartItemService.removeItemFromCart(cartId, productId,selectedColor);
             return ResponseEntity.ok(new ApiResponse("Remove Item Success", null));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("CartItemController failed "+e.getMessage());
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -60,7 +66,8 @@ public class CartItemController {
             cartItemService.updateItemQuantity(cartId, productId, quantity,selectedColor);
             return ResponseEntity.ok(new ApiResponse("Update Item Success", null));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("CartItemController failed "+e.getMessage());
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
 
     }

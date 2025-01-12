@@ -7,6 +7,9 @@ import com.dailycodework.dreamshops.model.Category;
 import com.dailycodework.dreamshops.response.ApiResponse;
 import com.dailycodework.dreamshops.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("${api.prefix}/categories")
 public class CategoryController {
     private final ICategoryService categoryService;
+    private static final Logger logger = LogManager.getLogger(CategoryController.class);
 
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllCategories() {
@@ -26,7 +30,8 @@ public class CategoryController {
             List<Category> categories = categoryService.getAllCategories();
             return  ResponseEntity.ok(new ApiResponse("Found!", categories));
         } catch (Exception e) {
-           return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Error:", INTERNAL_SERVER_ERROR));
+        	logger.error("CategoryController failed "+e.getMessage());
+        	return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Error:", INTERNAL_SERVER_ERROR));
         }
     }
 
@@ -36,7 +41,8 @@ public class CategoryController {
         	Category theCategory = categoryService.addCategory(name);
             return  ResponseEntity.ok(new ApiResponse("Success", theCategory));
         } catch (AlreadyExistsException e) {
-           return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("CategoryController failed "+e.getMessage());
+        	return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -46,7 +52,8 @@ public class CategoryController {
         	Category theCategory = categoryService.getCategoryById(id);
             return  ResponseEntity.ok(new ApiResponse("Found", theCategory));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("CategoryController failed "+e.getMessage());
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -56,6 +63,7 @@ public class CategoryController {
         	List<Category> theCategory = categoryService.getCategoryByName(maincategory);
             return  ResponseEntity.ok(new ApiResponse("Found", theCategory));
         } catch (ResourceNotFoundException e) {
+        	logger.error("CategoryController failed "+e.getMessage());        	
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -66,7 +74,8 @@ public class CategoryController {
         	List<Category> theCategory = categoryService.getSubCategoryByName(subcategory);
             return  ResponseEntity.ok(new ApiResponse("Found", theCategory));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("CategoryController failed "+e.getMessage());        	
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
     
@@ -76,7 +85,8 @@ public class CategoryController {
         	List<Category> theCategory = categoryService.getCategoryByName(name);
             return  ResponseEntity.ok(new ApiResponse("Found", theCategory));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("CategoryController failed "+e.getMessage());        	
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -87,7 +97,8 @@ public class CategoryController {
             categoryService.deleteCategoryById(id);
             return  ResponseEntity.ok(new ApiResponse("Found", null));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("CategoryController failed "+e.getMessage());        	
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
@@ -97,7 +108,8 @@ public class CategoryController {
         	Category updatedCategory = categoryService.updateCategory(category, id);
             return ResponseEntity.ok(new ApiResponse("Update success!", updatedCategory));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        	logger.error("CategoryController failed "+e.getMessage());        
+        	return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
